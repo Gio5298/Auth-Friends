@@ -1,24 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
+import Axios from 'axios';
+import { Reset } from 'styled-reset';
+import Login from './components/Login';
+import FriendsList from './components/FriendsList';
+
+const PrivateRouter = ({ compnent: Component, ...rest}) => (
+
+  <Route
+    {...rest}
+    render ={props => 
+    localStorage.getItem('token') ? (
+      <Component {...props} /> 
+    ) : (
+      <Redirect to="/" />
+    )
+    }
+    />
+);
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Reset />
+      <Route exact path='/' component={Login} />
+      <PrivateRouter path="/friendsList" component={FriendsList} />
     </div>
   );
 }
